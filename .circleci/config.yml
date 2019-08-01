@@ -39,6 +39,12 @@ jobs: # A basic unit of work in a run
             . venv/bin/activate
             sudo pip3 install -r requirements.txt
             tox -r
+      - run:
+          name: running flake8 using tox
+          command: |
+            rm -rf venv
+            . venv/bin/activate
+            tox -r      
       # - run:
       #     name: Setup the database
       #     command: 
