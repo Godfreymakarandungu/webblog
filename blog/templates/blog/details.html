@@ -1,0 +1,16 @@
+{% extends 'blog/layout.html' %}
+{% block content %}
+<h3 class="center-align red lighten-3">{{blogs.title}}</h3>
+<div class="card">
+  <div class="card-content">
+    {{blogs.body}}
+  </div>
+  <div class="card-content">
+    <a href="{{blogs.urls}}" target="_blank">go to site</a>
+  </div>
+  <div class="card-action">
+    {{blogs.created_at}}
+  </div>
+</div>
+<a href="/blog" class="btn">Go Back</a>
+{% endblock %}

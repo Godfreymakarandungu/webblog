@@ -1,0 +1,13 @@
+server {
+    server_name makarablog.duckdns.org www.makarablog.duckdns.org;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+    location /static/ {
+            root /home/godfreymakarandungu/site/makarablog;
+    }
+
+    location / {
+            include proxy_params;
+            proxy_pass http://unix:/home/godfreymakarandungu/site/makarablog/makarablog.sock;
+    }

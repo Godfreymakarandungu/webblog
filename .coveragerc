@@ -1,0 +1,19 @@
+[report]
+show_missing =False
+[run]
+branch = True
+omit =
+    __pycache__
+    */.local/*
+    tests/* 
+    test_*
+    /usr/*
+    */lib/*
+    *apps.py,
+    *migrations/*,
+    *settings*,
+    *tests/*,
+    *urls.py,
+    *wsgi/*,
+    manage.py
+    /usr/*
