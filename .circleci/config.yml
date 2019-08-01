@@ -42,7 +42,7 @@ jobs: # A basic unit of work in a run
       - run:
           name: running flake8 using tox
           command: |
-            rm -rf venv
+            
             . venv/bin/activate
             tox -r      
       # - run:
