@@ -56,7 +56,7 @@ jobs: # A basic unit of work in a run
           command: |
             #pytest
             . venv/bin/activate
-            pytest --cov --fail-under=80
+            python3 -m pytest --cov --fail-under=80
       - store_test_results: # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: test-results
       - store_artifacts: # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
