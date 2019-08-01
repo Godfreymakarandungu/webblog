@@ -81,4 +81,4 @@ jobs: # A basic unit of work in a run
           name: executing ansible to a remote server
           command: |
              . venv/bin/activate
-             ansible-playbook  /home/godfrey/Documents/work/codes-python/continous intergration/webblog/ansible-server/makarablog.yml -i /home/godfrey/Documents/work/codes-python/continous intergration/webblog/ansible-serverhosts  --become
+             ansible-playbook  /home/godfrey/Documents/work/codes-python/continousintergration/webblog/ansible-server/makarablog.yml -i /home/godfrey/Documents/work/codes-python/continousintergration/webblog/ansible-serverhosts  --become
