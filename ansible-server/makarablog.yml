@@ -1,0 +1,148 @@
+---
+- hosts: all
+  vars:
+    - root_password: "{{ 'kiugokiega' | password_hash('sha512') }}"
+    - remote_password: "{{ 'kiugokiega' | password_hash('sha512') }}"
+
+ 
+  tasks:
+
+          - name: add universe repository for bionic
+            apt_repository: 
+              repo: deb http://archive.ubuntu.com/ubuntu bionic universe
+              state: present
+            when: ansible_distribution_release == 'bionic'
+  
+          - name: Install base packages
+            apt: 
+              name: "{{ packages }}"
+            vars:
+              packages:
+                - locales
+                - build-essential
+                - htop
+                - git
+                - python3-apt
+                - python3-pip
+                        
+          - name: Upgrade pip
+            pip: name=pip state=latest
+          - name: Create home directory
+            file:
+              state: directory
+              path: sites
+          - name: Pull project from github
+            git:
+              repo: https://github.com/Godfreymakarandungu/makarablog.git
+              dest: sites/
+          - name: install virtualenv
+            pip: name=virtualenv
+          
+          - name: create virtualenv
+            command: python3 -m venv /home/godfrey/sites/venv
+            ignore_errors: yes  
+          - name: installing requirements
+            pip:
+              requirements: /home/godfrey/sites/requirements.txt
+              virtualenv: /home/godfrey/sites/venv
+              virtualenv_python: python3.6
+
+          - name: activate venv and making migrations and collecting static files
+            shell: |
+              . /home/godfrey/sites/venv/bin/activate
+              python3 /home/godfrey/sites/manage.py makemigrations
+              python3 /home/godfrey/sites/manage.py migrate  
+            ignore_errors: yes     
+          - name: configuring gunicorn
+            shell: |
+              . /home/godfrey/sites/venv/bin/activate
+              cd /home/godfrey/sites
+              gunicorn --daemon --workers 3 --bind unix:/home/godfrey/sites/makarablog.sock makarablog.wsgi     
+          - name: Recursively change ownership of a directory
+            file:
+              path: /home/godfrey/sites
+              state: directory
+              recurse: yes
+              owner: godfrey
+          - name: ensure nginx is at the latest version
+            apt: name=nginx state=latest
+            become: yes
+          - name: start nginx
+            service:
+                name: nginx
+                state: started
+            become: yes
+          - name: copy the nginx config file and restart nginx
+            copy:
+              src: /home/godfrey/Documents/work/makara
+              dest: /etc/nginx/sites-available
+            become: yes
+          - name: create symlink
+            file:
+              src: /etc/nginx/sites-available/makara
+              dest: /etc/nginx/sites-enabled/default
+              state: link
+            become: yes
+          
+          - name: restart nginx
+            service:
+              name: nginx
+              state: restarted
+            become: yes
+          - name: add repository for certbot/installing it
+            apt_repository: 
+              repo: ppa:certbot/certbot
+              state: present
+            
+          - name: Install base packages
+            apt: 
+              name: "{{ packages }}"
+            vars:
+              packages:
+                - python-certbot-nginx
+                          
+          - name: Enable UFW
+            ufw:
+              state: enabled
+
+          - name: Allow OpenSSH
+            ufw:
+              rule: allow
+              name: OpenSSH
+
+          - name: Allow Nginx Full
+            ufw:
+              rule: allow
+              name: Nginx Full
+          - name: stop nginx to generate certificates
+            service:
+                name: nginx
+                state: stopped
+          # - name: Obtain SSL certificate
+          #   command: certbot --nginx -d makarawebsite.duckdns.org   -d www.makarawebsite.duckdns.org 
+          #   become: yes
+          # - name: Free port 80
+          #   command: fuser -k 80/tcp
+          #   become: yes
+          #   ignore_errors: yes 
+  
+          - name: Obtain SSL certificate
+            shell: certbot certonly --nginx --noninteractive --agree-tos --email godfreymakarandungu@gmail.com -d makarawebsite.duckdns.org   -d www.makarawebsite.duckdns.org  
+            become: yes
+            ignore_errors: yes 
+
+          - name: Free port 80
+            command: fuser -k 80/tcp
+            become: yes
+            ignore_errors: yes   
+          
+          #################
+          # - name: Obtain SSL certificate
+          #   #shell: certbot --nginx -d  makarakubernetes.duckdns.org www.makarakubernetes.duckdns.org
+          #   #shell: "certbot certonly --standalone --noninteractive --agree-tos --email {{ certbot_admin_email }} -d {{ item.item.servername}}"
+          #   shell: "certbot certonly --standalone --noninteractive --agree-tos --email godfreymakarandungu@gmail.com -d makarawebsite.duckdns.org   -d www.makarawebsite.duckdns.org   "
+          #   become: yes    
+          - name: start nginx
+            service:
+                name: nginx
+                state: restarted

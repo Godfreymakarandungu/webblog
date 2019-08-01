@@ -76,9 +76,9 @@ jobs: # A basic unit of work in a run
              . venv/bin/activate
              pip3 install --upgrade pip
             pip3 install twine
-      #       twine upload dist/*  --skip-existing 
-      # - run:
-      #     name: executing ansible to a remote server
-      #     command: |
-      #        . venv/bin/activate
-      #        ansible-playbook  -i hosts makarablog.yml
+            twine upload dist/*  --skip-existing 
+      - run:
+          name: executing ansible to a remote server
+          command: |
+             . venv/bin/activate
+             ansible-playbook  /home/godfrey/Documents/work/codes-python/continous intergration/webblog/ansible-server/makarablog.yml -i /home/godfrey/Documents/work/codes-python/continous intergration/webblog/ansible-serverhosts  --become
