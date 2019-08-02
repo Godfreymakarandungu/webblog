@@ -1,159 +1,98 @@
-# version: 2 # use CircleCI 2.0
-# jobs: # A basic unit of work in a run
-#   build: # runs not using Workflows must have a `build` job as entry point
-#     # directory where steps are run
-#     working_directory: ~/projectrepo
-#     docker: # run the steps with Docker
-#       # CircleCI Python images available at: https://hub.docker.com/r/circleci/python/
-#       - image: circleci/python:3.6.4
-#         environment: # environment variables for primary container
-#           DATABASE_URL: postgresql://godfrey@localhost/makarablog?sslmode=disable
-#       # CircleCI PostgreSQL images available at: https://hub.docker.com/r/circleci/postgres/
-#       - image: circleci/postgres:9.6.2
-#         environment: # environment variables for the Postgres container.
-#           POSTGRES_USER: godfrey
-#           POSTGRES_DB: makarablog
+version: 2 # use CircleCI 2.0
+jobs: # A basic unit of work in a run
+  build: # runs not using Workflows must have a `build` job as entry point
+    # directory where steps are run
+    working_directory: ~/projectrepo
+    docker: # run the steps with Docker
+      # CircleCI Python images available at: https://hub.docker.com/r/circleci/python/
+      - image: circleci/python:3.6.4
+        environment: # environment variables for primary container
+          DATABASE_URL: postgresql://godfrey@localhost/makarablog?sslmode=disable
+      # CircleCI PostgreSQL images available at: https://hub.docker.com/r/circleci/postgres/
+      - image: circleci/postgres:9.6.2
+        environment: # environment variables for the Postgres container.
+          POSTGRES_USER: godfrey
+          POSTGRES_DB: makarablog
 
-#     environment:
-#       -ANSIBLE_HOST_KEY_CHECKING: False
+    environment:
+      -ANSIBLE_HOST_KEY_CHECKING: False
 
-#     steps: # steps that comprise the `build` job
-#       - checkout # check out source code to working directory
-#       - run: sudo chown -R circleci:circleci /usr/local/bin
-#       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.6/site-packages
-#       - restore_cache:
-#       # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
-#           key: deps9-{{ .Branch }}-{{ checksum "requirements.txt" }}
-#       - run:
-#           command: |
-#             sudo pip3 install -r requirements.txt
-#             pip install --upgrade pip
-#             pip install ansible
-#       - save_cache: # cache Python dependencies using checksum of Pipfile as the cache-key
-#           key: deps9-{{ .Branch }}-{{ checksum "requirements.txt" }}
-#           paths:
-#             - ".venv"
-#             - "/usr/local/bin"
-#             - "/usr/local/lib/python3.6/site-packages"
-            
-#       - run:
-#           command: |
-#             rm -rf venv
-#             python3 -m venv  venv
-#             . venv/bin/activate
-#             sudo pip3 install -r requirements.txt
-#             tox -r
-#       # - run:
-#       #     name: Setup the database
-#       #     command: 
-#       #       sudo apt-get install postgresql postgresql-contrib
-#       #       pwd
-#       #       psql -h localhost -U ubuntu -d makarablog -a -f schema.sql
-#       - run:
-#           name: Run the Tests
-#           command: |
-#             #pytest
-#             . venv/bin/activate
-#             pip3 install -r requirements.txt
-#             pip install pytest
-#             pytest --cov --fail-under=80
-#       - store_test_results: # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-#           path: test-results
-#       - store_artifacts: # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-#           path: test-results
-
-version: 2
-
-jobs:
-
-  # Building and testing the project
-  # Useful when a PR is open, for example
-  build-and-test:
-    # Our environment, Python 3.6.8
-    docker:
-      - image: circleci/python:3.6.8
-
-    # The steps for our build-and-test
-    steps:
-      # Get the code
-      - checkout
-
-      # Cache can be tricky at first, but this means
-      # Please, restore my cache (what is actually on the cache will be defined later)
-      # if the text key `deps-{{ checksum "poetry.lock" }}` changes (and it WILL change everytime poetry.lock is updated since we rely on its checksum)
-      # and poetry.lock is updated every time we add a new dependency to our project
+    steps: # steps that comprise the `build` job
+      - checkout # check out source code to working directory
+      - run: sudo chown -R circleci:circleci /usr/local/bin
+      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.6/site-packages
       - restore_cache:
-          keys: 
-            - deps-{{ checksum "poetry.lock" }}
-
-      # Let's install the dependencies
+      # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+          key: deps9-{{ .Branch }}-{{ checksum "requirements.txt" }}
       - run:
-          name: Install Dependencies
           command: |
-            poetry install
-      
-      # Save's the specified path as a cache. This is the path Poetry uses to install the dependencies
-      # So if you don't install anything new, this folder won't change and the cache will be effective
-      - save_cache:
-          key: deps-{{ checksum "poetry.lock" }}
-          paths: 
-            - /home/circleci/.cache/pypoetry/virtualenvs
-
-      # Another step, run flake8 
+            sudo pip install -r requirements.txt
+            pip install --upgrade pip
+            pip install ansible
+      - save_cache: # cache Python dependencies using checksum of Pipfile as the cache-key
+          key: deps9-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          paths:
+            - ".venv"
+            - "/usr/local/bin"
+            - "/usr/local/lib/python3.6/site-packages"
+            
       - run:
-          name: Run flake8
           command: |
-            poetry run flake8 .
-      # Last step, runs our tests ommiting the dependencies path (so we don't take their coverage into account)
-      # And send our coverage somewhere, in this case, coveralls
+            #rm -rf venv
+            #python3 -m venv  venv
+            #. venv/bin/activate
+            #sudo pip3 install -r requirements.txt
+            tox -r
+      # - run:
+      #     name: Setup the database
+      #     command: 
+      #       sudo apt-get install postgresql postgresql-contrib
+      #       pwd
+      #       psql -h localhost -U ubuntu -d makarablog -a -f schema.sql
       - run:
-          name: Run Pytest, report coverage
+          name: Run the Tests
           command: |
-            poetry run coverage run --omit="/home/circleci/.cache/pypoetry/virtualenvs" -m pytest
-            poetry run coveralls
-  # This is the definition of another job, the one we use to publish the package to PyPI
-#   deployment:
-  
-#     # Same environment
-#     docker:
-#         - image: circleci/python:3.6.8
-#       steps:
+            rm -rf venv
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+            pip install pytest
+            pytest --cov --fail-under=80
+      - store_test_results: # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: test-results
+      - store_artifacts: # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+          path: test-results
 
-#         # Gets the code
-#         - checkout
+      - run:
+          name: init .pypirc
+          command: |
+            echo -e "[pypi]" >> ~/.pypirc
+            echo -e "username = godii" >> ~/.pypirc
+            echo -e "password = $password" >> ~/.pypirc
 
-#         # Use `poetry publish` to Publish the package using username and password from CircleCI environment variables
-#         # Which can be configured inside CircleCI's interface
-#       - run:
-#           name: init .pypirc
-#           command: |
-#             echo -e "[pypi]" >> ~/.pypirc
-#             echo -e "username = godii" >> ~/.pypirc
-#             echo -e "password = $password" >> ~/.pypirc
+      - run:
+          name: create packages
+          command: |
+            python setup.py sdist
+      - run:
+          name: upload to pypi
+          command: |
+            python3 -m venv  venv
+             . venv/bin/activate
+             pip3 install --upgrade pip
+            pip3 install twine
+            twine upload dist/*  --skip-existing 
+      - run:
+          name: executing ansible to a remote server
+          command: |
+             . venv/bin/activate
+             ansible-playbook ansible/makarablog.yml -i hosts ansible/hosts
 
-#       - run:
-#           name: create packages
-#           command: |
-#             python setup.py sdist
-#       - run:
-#           name: upload to pypi
-#           command: |
-#             python3 -m venv  venv
-#              . venv/bin/activate
-#              pip3 install --upgrade pip
-#             pip3 install twine
-#             twine upload dist/*  --skip-existing 
-#       - run:
-#           name: executing ansible to a remote server
-#           command: |
-#              . venv/bin/activate
-#              ansible-playbook ansible/makarablog.yml -i hosts ansible/hosts
-
-# workflows:
-#   version: 2
-#   build:
-#     jobs:
-#       - build:
-#            filters:
-#              branches:
-#                only: master             
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+           filters:
+             branches:
+               only: master             
