@@ -52,11 +52,11 @@ jobs: # A basic unit of work in a run
       - run:
           name: Run the Tests
           command: |
-            rm -rf venv
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
-            pip install pytest
+            #rm -rf venv
+            #python3 -m venv venv
+            #. venv/bin/activate
+            #pip install -r requirements.txt
+            #pip install pytest
             pytest --cov --fail-under=80
       - store_test_results: # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: test-results
