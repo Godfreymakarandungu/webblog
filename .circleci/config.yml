@@ -112,48 +112,48 @@ jobs:
             poetry run coverage run --omit="/home/circleci/.cache/pypoetry/virtualenvs" -m pytest
             poetry run coveralls
   # This is the definition of another job, the one we use to publish the package to PyPI
-  deployment:
+#   deployment:
   
-    # Same environment
-    docker:
-        - image: circleci/python:3.6.8
-      steps:
+#     # Same environment
+#     docker:
+#         - image: circleci/python:3.6.8
+#       steps:
 
-        # Gets the code
-        - checkout
+#         # Gets the code
+#         - checkout
 
-        # Use `poetry publish` to Publish the package using username and password from CircleCI environment variables
-        # Which can be configured inside CircleCI's interface
-      - run:
-          name: init .pypirc
-          command: |
-            echo -e "[pypi]" >> ~/.pypirc
-            echo -e "username = godii" >> ~/.pypirc
-            echo -e "password = $password" >> ~/.pypirc
+#         # Use `poetry publish` to Publish the package using username and password from CircleCI environment variables
+#         # Which can be configured inside CircleCI's interface
+#       - run:
+#           name: init .pypirc
+#           command: |
+#             echo -e "[pypi]" >> ~/.pypirc
+#             echo -e "username = godii" >> ~/.pypirc
+#             echo -e "password = $password" >> ~/.pypirc
 
-      - run:
-          name: create packages
-          command: |
-            python setup.py sdist
-      - run:
-          name: upload to pypi
-          command: |
-            python3 -m venv  venv
-             . venv/bin/activate
-             pip3 install --upgrade pip
-            pip3 install twine
-            twine upload dist/*  --skip-existing 
-      - run:
-          name: executing ansible to a remote server
-          command: |
-             . venv/bin/activate
-             ansible-playbook ansible/makarablog.yml -i hosts ansible/hosts
+#       - run:
+#           name: create packages
+#           command: |
+#             python setup.py sdist
+#       - run:
+#           name: upload to pypi
+#           command: |
+#             python3 -m venv  venv
+#              . venv/bin/activate
+#              pip3 install --upgrade pip
+#             pip3 install twine
+#             twine upload dist/*  --skip-existing 
+#       - run:
+#           name: executing ansible to a remote server
+#           command: |
+#              . venv/bin/activate
+#              ansible-playbook ansible/makarablog.yml -i hosts ansible/hosts
 
-workflows:
-  version: 2
-  build:
-    jobs:
-      - build:
-           filters:
-             branches:
-               only: master             
+# workflows:
+#   version: 2
+#   build:
+#     jobs:
+#       - build:
+#            filters:
+#              branches:
+#                only: master             
