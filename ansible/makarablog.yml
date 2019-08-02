@@ -127,7 +127,7 @@
           #   ignore_errors: yes 
   
           - name: Obtain SSL certificate
-            shell: certbot certonly --nginx --noninteractive --agree-tos --email godfreymakarandungu@gmail.com -d makaracircle.duckdns.org  -d www.makaracircle.duckdns.org 
+            shell: certbot --nginx --noninteractive --agree-tos --email godfreymakarandungu@gmail.com -d makaracircle.duckdns.org  -d www.makaracircle.duckdns.org 
             become: yes
             ignore_errors: yes 
 
