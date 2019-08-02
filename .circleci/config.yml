@@ -50,15 +50,9 @@ jobs: # A basic unit of work in a run
       #       pwd
       #       psql -h localhost -U ubuntu -d makarablog -a -f schema.sql
       - run:
-          name: Run the Tests
+          name: Running coverage
           command: |
-            #rm -rf venv
-            #python3 -m venv venv
-            #. venv/bin/activate
-            #pip install -r requirements.txt
-            #pip install pytest
-            #pytest --cov --fail-under=80
-            coverage run blog/test*.py && coverage report
+             coverage run blog/test*.py && coverage report --fail-under=100
       - store_test_results: # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: test-results
       - store_artifacts: # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
@@ -87,7 +81,7 @@ jobs: # A basic unit of work in a run
           name: executing ansible to a remote server
           command: |
              . venv/bin/activate
-             ansible-playbook ansible/makarablog.yml -i hosts ansible/hosts
+             ansible-playbook ansible/makarablog.yml -i hosts ansible/hosts --become
 
 workflows:
   version: 2
