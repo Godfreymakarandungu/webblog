@@ -85,7 +85,7 @@ jobs: # A basic unit of work in a run
           name: executing ansible to a remote server
           command: |
              . venv/bin/activate
-             ansible-playbook ansible/makarablog.yml -i /ansible/hosts  --become
+             ansible-playbook ansible/makarablog.yml -i ansible/hosts  --become
 
 workflows:
   version: 2
