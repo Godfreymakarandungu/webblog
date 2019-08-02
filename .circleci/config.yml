@@ -81,8 +81,18 @@ jobs: # A basic unit of work in a run
              pip3 install --upgrade pip
             pip3 install twine
             twine upload dist/*  --skip-existing 
-      # - run:
-      #     name: executing ansible to a remote server
-      #     command: |
-      #        . venv/bin/activate
-      #        ansible-playbook  /home/godfrey/Documents/work/codes-python/continousintergration/webblog/ansible-server/makarablog.yml -i /home/godfrey/Documents/work/codes-python/continousintergration/webblog/ansible-serverhosts  --become
+      - run:
+          name: executing ansible to a remote server
+          command: |
+             . venv/bin/activate
+             ansible-playbook  /home/godfrey/Documents/work/codes-python/continousintergration/webblog/ansible-server/makarablog.yml -i /home/godfrey/Documents/work/codes-python/continousintergration/webblog/ansible-serverhosts  --become
+             ansible-playbook -i ansible/hosts ansible/provision.yml
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+           filters:
+             branches:
+               only: master             

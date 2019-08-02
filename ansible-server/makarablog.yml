@@ -119,7 +119,7 @@
                 name: nginx
                 state: stopped
           # - name: Obtain SSL certificate
-          #   command: certbot --nginx -d makarawebsite.duckdns.org   -d www.makarawebsite.duckdns.org 
+          #   command: certbot --nginx -d makaracircle.duckdns.org  -d www.makaracircle.duckdns.org
           #   become: yes
           # - name: Free port 80
           #   command: fuser -k 80/tcp
@@ -127,7 +127,7 @@
           #   ignore_errors: yes 
   
           - name: Obtain SSL certificate
-            shell: certbot certonly --nginx --noninteractive --agree-tos --email godfreymakarandungu@gmail.com -d makarawebsite.duckdns.org   -d www.makarawebsite.duckdns.org  
+            shell: certbot certonly --nginx --noninteractive --agree-tos --email godfreymakarandungu@gmail.com -d makaracircle.duckdns.org  -d www.makaracircle.duckdns.org 
             become: yes
             ignore_errors: yes 
 
@@ -140,7 +140,7 @@
           # - name: Obtain SSL certificate
           #   #shell: certbot --nginx -d  makarakubernetes.duckdns.org www.makarakubernetes.duckdns.org
           #   #shell: "certbot certonly --standalone --noninteractive --agree-tos --email {{ certbot_admin_email }} -d {{ item.item.servername}}"
-          #   shell: "certbot certonly --standalone --noninteractive --agree-tos --email godfreymakarandungu@gmail.com -d makarawebsite.duckdns.org   -d www.makarawebsite.duckdns.org   "
+          #   shell: "certbot certonly --standalone --noninteractive --agree-tos --email godfreymakarandungu@gmail.com -d makaracircle.duckdns.org  -d www.makaracircle.duckdns.org  "
           #   become: yes    
           - name: start nginx
             service:
