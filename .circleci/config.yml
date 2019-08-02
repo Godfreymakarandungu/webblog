@@ -51,12 +51,12 @@ jobs: # A basic unit of work in a run
       #       sudo apt-get install postgresql postgresql-contrib
       #       pwd
       #       psql -h localhost -U ubuntu -d makarablog -a -f schema.sql
-      - run:
-          name: Run the Tests
-          command: |
-            #pytest
-            . venv/bin/activate
-            python3 -m pytest --cov --fail-under=80
+      # - run:
+      #     name: Run the Tests
+      #     command: |
+      #       #pytest
+      #       . venv/bin/activate
+      #       python3 -m pytest --cov --fail-under=80
       - store_test_results: # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: test-results
       - store_artifacts: # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
