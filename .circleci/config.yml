@@ -52,8 +52,8 @@ jobs: # A basic unit of work in a run
       - run:
           name: Running coverage
           command: |
-            # coverage run blog/test*.py && coverage report --cov-fail-under=100
-            coverage run --source='.' manage.py test
+            # coverage run blog/test*.py && coverage report
+            coverage run --source='.' manage.py test -m  --cov-fail-under=100
             coverage report
       - store_test_results: # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: test-results
