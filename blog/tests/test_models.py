@@ -20,12 +20,12 @@ def test_new_user(django_user_model):
     
 # # pytestmark = pytest.mark.django_db
 
-@pytest.mark.django_db
-class TestUsers:
-    pytestmark = pytest.mark.django_db
-    def test_my_user(self):
-        me = User.objects.get(username='godfrey')
-        assert me.is_superuser    
+# @pytest.mark.django_db
+# class TestUsers:
+#     pytestmark = pytest.mark.django_db
+#     def test_my_user(self):
+#         me = User.objects.get(username='godfrey')
+#         assert me.is_superuser    
 
 # class TestEntry(TestCase):
 #     def create_Blog(self, text='makara'):
