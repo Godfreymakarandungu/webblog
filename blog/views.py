@@ -15,7 +15,7 @@ def index(request):
 
   return render(request, 'blog/index.html', context)
 
-def details(request, id):
+def details(request, id):# pragma: no py2 cover
   blogs=Blog.objects.get(id=id)
   context = {
     'blogs': blogs
