@@ -18,4 +18,4 @@ omit =
     manage.py
     /usr/*
     setup.py
-    wsgi.py
+    makarablog/wsgi.py 
