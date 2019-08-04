@@ -13,7 +13,9 @@ omit =
     *migrations/*,
     *settings*,
     *tests/*,
-    *urls.py,
+     urls.py,
     *wsgi/*,
     manage.py
     /usr/*
+    setup.py
+    wsgi.py
