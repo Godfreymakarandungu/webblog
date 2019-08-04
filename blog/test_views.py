@@ -9,8 +9,7 @@ class TestEntryListViews(TestCase):
     def test_EntryListView(self):
         req = RequestFactory().get('')
         respo = EntryListView.as_view()(req)
-        assert respo.status_code == 200, 'called by anyone'
-
+        assert respo.status_code == 200
 
 class TestAdd(TestCase):
     url = RequestFactory().get('add/')

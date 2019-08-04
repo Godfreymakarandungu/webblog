@@ -15,11 +15,11 @@ def index(request):
 
   return render(request, 'blog/index.html', context)
 
-# def details(request, id):
-#   blogs=Blog.objects.get(id=id)
-#   context = {
-#     'blogs': blogs
+def details(request, id):
+  blogs=Blog.objects.get(id=id)
+  context = {
+    'blogs': blogs
     
-#   }
+  }
 
-#   return render(request, 'blog/details.html', context)
+  return render(request, 'blog/details.html', context)
