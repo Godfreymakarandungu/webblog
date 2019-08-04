@@ -24,12 +24,12 @@ def test_new_user(django_user_model):
 # #         me = User.objects.get(username='godfrey')
 # #         assert me.is_superuser    
 
-class TestEntry(TestCase):
-    def create_Entry(self, text='makara'):
-        return Entry.objects.create(
-            text='jhghgf', date_posted=timezone.now())
+# class TestEntry(TestCase):
+#     def create_Entry(self, text='makara'):
+#         return Entry.objects.create(
+#             text='jhghgf', date_posted=timezone.now())
 
-    def test_Entry_creation(self):
-        created = self.create_Entry()
-        self.assertTrue(isinstance(created, Entry))
-        self.assertTrue(created.__str__(), created.id)
+#     def test_Entry_creation(self):
+#         created = self.create_Entry()
+#         self.assertTrue(isinstance(created, Entry))
+#         self.assertTrue(created.__str__(), created.id)
