@@ -1,15 +1,5 @@
 from django.urls import reverse
 from entries import views
-from entries.views import EntryListView
-from django.test import RequestFactory, TestCase
-from entries.forms import EntryForm
-
-
-class TestEntryListViews(TestCase):
-    def test_EntryListView(self):
-        req = RequestFactory().get('')
-        respo = EntryListView.as_view()(req)
-        assert respo.status_code == 200
 
 class TestAdd(TestCase):
     url = RequestFactory().get('add/')

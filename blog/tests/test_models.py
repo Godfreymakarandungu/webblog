@@ -1,8 +1,5 @@
 import pytest
 from django.test import TestCase
-from django.utils import timezone
-from entries.models import Entry
-from django.core.management import call_command
 # from django.contrib.auth import get_user_model
 # User = get_user_model()
 
@@ -20,19 +17,19 @@ def test_new_user(django_user_model):
     
 # # pytestmark = pytest.mark.django_db
 
-# @pytest.mark.django_db
-# class TestUsers:
-#     pytestmark = pytest.mark.django_db
-#     def test_my_user(self):
-#         me = User.objects.get(username='godfrey')
-#         assert me.is_superuser    
+# # @pytest.mark.django_db
+# # class TestUsers:
+# #     pytestmark = pytest.mark.django_db
+# #     def test_my_user(self):
+# #         me = User.objects.get(username='godfrey')
+# #         assert me.is_superuser    
 
-# class TestEntry(TestCase):
-#     def create_Blog(self, text='makara'):
-#         return Entry.objects.create(
-#             text='jhghgf', date_posted=timezone.now())
+class TestEntry(TestCase):
+    def create_Entry(self, text='makara'):
+        return Entry.objects.create(
+            text='jhghgf', date_posted=timezone.now())
 
-#     def test_Entry_creation(self):
-#         created = self.create_Blog()
-#         self.assertTrue(isinstance(created, Entry))
-#         self.assertTrue(created.__str__(), created.id)
+    def test_Entry_creation(self):
+        created = self.create_Entry()
+        self.assertTrue(isinstance(created, Entry))
+        self.assertTrue(created.__str__(), created.id)
